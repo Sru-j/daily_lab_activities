@@ -1,1 +1,61 @@
+## BLUETOOTH 
+| Filter                                | Why Important                                        |
+| ------------------------------------- | ---------------------------------------------------- |
+| `bthci_evt`                           | To observe Bluetooth discovery and connection events |
+| `bthci_acl`                           | To observe Bluetooth data communication              |
+| `btl2cap`                             | To analyze pairing and logical channel communication |
+| `btatt`                               | To analyze BLE attribute communication               |
+| `btsdp`                               | To analyze service discovery                         |
+| `btle`                                | To analyze BLE traffic                               |
+| `bthid`                               | To analyze Bluetooth keyboard/mouse activity         |
+| `bthci_evt.code == 0x16`              | To identify PIN request events                       |
+| `bluetooth.addr == XX:XX:XX:XX:XX:XX` | To filter traffic for a specific Bluetooth device    |
+
+BLUETOOTH DEVICE SCANNING
+hcitool scan
+
+WHAT TO LOOK FOR 
+
+| Question Asked               | Filter                   | Packet to Choose    |
+| ---------------------------- | ------------------------ | ------------------- |
+| Find discovery process       | `bthci_evt`              | Inquiry packets     |
+| Find connection process      | `bthci_evt`              | Connection Complete |
+| Find PIN request             | `bthci_evt.code == 0x16` | PIN Code Request    |
+| Find Bluetooth communication | `bthci_acl`              | ACL packets         |
+| Find pairing/L2CAP           | `btl2cap`                | L2CAP packets       |
+| Find BLE data                | `btatt`                  | ATT packets         |
+| Find services                | `btsdp`                  | SDP packets         |
+| Find device MAC              | `bthci_acl`              | HCI ACL Packet      |
+
+
+
+## WIRELESS
+
+sudo apt update && sudo apt install -y python3-pip nodejs npm docker.io docker-compose wireshark bettercap adb openjdk-17-jdk ghidra binwalk qemu-system terraform awscli jq
+pip3 install bleak paho-mqtt frida-tools
+sudo npm install -g bleno
+sudo usermod -aG docker $USER
+
+| Filter                       | Why Important                     |
+| ---------------------------- | --------------------------------- |
+| `wlan`                       | To identify Wi-Fi traffic         |
+| `eapol`                      | To identify WPA handshake         |
+| `wlan.fc.type_subtype == 8`  | To identify Beacon frames         |
+| `wlan.ssid == "teddy"`       | To isolate target network         |
+| `wlan.fc.type == 2`          | To observe data packets           |
+| `wlan.fc.type_subtype == 11` | To observe authentication process |
+
+
+WHAT TO LOOK FOR
+
+| Question Asked      | Filter to Use                | Packet to Select        |
+| ------------------- | ---------------------------- | ----------------------- |
+| Find SSID           | `wlan.fc.type_subtype == 8`  | Beacon frame            |
+| Find WPA handshake      | `eapol`                      | EAPOL packets           |
+| Find MAC address    | `wlan`                       | Any WLAN packet         |
+| Find authentication | `wlan.fc.type_subtype == 11` | Authentication packet   |
+| Find deauth attack  | `wlan.fc.type_subtype == 12` | Deauthentication packet |
+| Find probe request  | `wlan.fc.type_subtype == 4`  | Probe Request           |
+
+
 
