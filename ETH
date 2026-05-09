@@ -77,6 +77,25 @@ WHAT TO LOOK FOR
 
 CLOUD :
 
+
+1. Create vulnerable cloud environment using CloudGoat - Tool : CloudGoat - 
+2. Open vulnerable cloud-hosted web application - Browser
+3. Analyze SSRF vulnerability - Browser and CloudGoat vulnerable application - Analyze Server Side Request Forgery vulnerability
+4. Access AWS metadata service - Browser and AWS Metadata Endpoint - Access EC2 instance metadata
+5. Extract IAM credentials - AWS Metadata Service - Obtain temporary cloud authentication tokens
+6. Configure AWS CLI using stolen credentials - aws cli - Authenticate using stolen credentials
+7. Enumerate cloud resources - aws cli - Discover accessible cloud resources
+8. Access S3 buckets - aws cli - Access sensitive cloud storage
+9. Analyze privilege escalation opportunities - IAM policy analysis and AWS CLI - Identify excessive cloud permissions
+10. Analyze container / ECS Takeover Analysis - cloudgoat and ECS scenario - Analyze container-based cloud attacks
+11. IAM role abuse - AWS CLI and IAM analysis - Exploit attached IAM roles
+12. Identify cloud security misconfigurations -   Security Risk                   Observation
+                                                  SSRF vulnerability	           Internal cloud services accessible
+                                                  Metadata exposure	          IAM credentials leaked
+                                                  Weak IAM permissions      	Privilege escalation possible
+                                                  Public S3 access	          Sensitive data exposed
+                                                  Container compromise	        Cloud infrastructure abuse
+
 Hackers target:
 Cloud servers
 Databases
