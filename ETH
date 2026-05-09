@@ -1,3 +1,19 @@
+Wi-Fi hacking Analysing the .pcap file for SSID 
+and BSSID Filter --> eapol --> packet no. 8 
+--> BSSID:Netgear ('value') --> copy the value --> kali --> 
+aircrack-ng -w /usr/share/wordlists/rockyou.txt wpa.full.cap Key Found! [ ]
+
+Bluetooth Hacking Filter --> ' bthci_evt.bd_addr ' – 
+MAC address --> Packet no. 12 --> BD_ADDR: value --> 
+Bluetooth scanning process to identify nearby devices 
+--> btle.advertising_header.pdu_type == 0x00 --> Packet no. 31 
+--> custom-id --> btle.advertising_header.pdu_type == 0x03 
+--> Packet no. 28 --> scanning address : 'value' 
+--> btle.advertising_header.pdu_type == 0x04 --> 
+Packet no. 23 --> advertising address : 'value'
+
+
+
 ## BLUETOOTH 
 | Filter                                | Why Important                                        |
 | ------------------------------------- | ---------------------------------------------------- |
@@ -58,4 +74,65 @@ WHAT TO LOOK FOR
 | Find probe request  | `wlan.fc.type_subtype == 4`  | Probe Request           |
 
 
+
+CLOUD :
+
+Hackers target:
+Cloud servers
+Databases
+APIs
+Storage buckets
+User accounts
+Containers and Kubernetes
+Misconfigured permissions
+
+Types of Cloud Hacking Attacks
+
+Misconfigured Storage Buckets
+Public cloud storage is accidentally exposed.
+Example
+An AWS S3 bucket is set to “public,” exposing:
+Customer data
+Passwords
+Source code
+Impact
+Data leaks
+Privacy violations
+Financial loss
+Prevention
+Disable public access
+Use encryption
+Enable logging and monitoring
+
+Credential Theft
+Hackers steal:
+Cloud usernames/passwords
+API keys
+Access tokens
+Methods
+Phishing
+Malware
+GitHub leaked keys
+Impact
+Full cloud account takeover
+Crypto mining abuse
+Data deletion
+Prevention
+Multi-factor authentication (MFA)
+Rotate keys regularly
+Use IAM least privilege
+
+API Exploitation
+Cloud services use APIs for communication.
+Hackers exploit:
+Weak authentication
+Broken access control
+Injection vulnerabilities
+Example
+A vulnerable API allows users to access other users’ data.
+Prevention
+Secure API gateways
+Rate limiting
+Authentication tokens
+Input validation
 
