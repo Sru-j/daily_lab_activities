@@ -1,0 +1,108 @@
+You are building a 3-tier architecture:
+| Layer     | Purpose          | Location       |
+| --------- | ---------------- | -------------- |
+| Web Layer | Public website   | Public Subnet  |
+| App Layer | Internal backend | Private Subnet |
+| DB Layer  | Database         | Private Subnet |
+
+STEP 1 — Create VPC
+AWS Console → VPC : create vpc :: name : AnyBank-VPC,  CIDR : 10.0.0.0/16
+
+STEP 2 — Create Subnets
+VPC → Subnets : create subnets :: name : Public-Subnet, CIDR : 10.0.1.0/24
+      create another (app ) :: name : App-Subnet
+      create another (DB) :: name : DB-Subnet
+
+STEP 3 — Create Internet Gateway
+VPC → Internet Gateways : Create Internet Gateway : name : Main-IGW, create,  actions : Attach to ur VPC
+
+
+STEP 4 — Configure Route Tables
+PUBLIC ROUTE TABLE :: VPC → Route Tables : Create Route Table : name : Public-RT
+            Add Route
+            Routes → Edit Routes
+            | Destination | Target           |
+            | ----------- | ---------------- |
+            | 0.0.0.0/0   | Internet Gateway |
+
+Associate Public Subnet : Subnet Associations → Public-Subnet : 
+Create another route table : name : Private-RT
+
+Create NAT Gateway : VPC → NAT Gateway : 
+Add Route to NAT
+In Private-RT: | Destination | Target      |
+               | ----------- | ----------- |
+               | 0.0.0.0/0   | NAT Gateway |
+Associate:
+      App Subnet
+      DB Subnet
+
+
+STEP 5 — Launch EC2 WEB SERVER
+EC2 → Launch Instance : name : Web-Server , subnet : Public-Subnet, Auto Assign Public IP: Enable, 
+Security Group : Create: Web-SG : allow : | Type  | Port |
+                                          | ----- | ---- |
+                                          | HTTP  | 80   |
+                                          | HTTPS | 443  |
+                                          | SSH   | 22   |
+
+
+STEP 6 — Launch APP SERVER 
+Launch another EC2 : Name: App-Server , Subnet: App-Subnet , Public IP: Disable
+Security Group : Create: App-SG : allow : | Port | Source |
+                                          | ---- | ------ |
+                                          | 8080 | Web-SG |
+                                          | SSH  | Web-SG |
+
+
+STEP 7 — Configure RDS DATABASE
+RDS → Create Database : Configure : Engine: MySQL
+DB Identifier: AnyBankDB , Connectivity : Choose: DB-Subnet, Public Access: No
+Security Group : Create: DB-SG : Allow: | Port | Source |
+                                        | ---- | ------ |
+                                        | 3306 | App-SG |
+
+
+STEP 8 — Create IAM ROLES
+IAM → Roles : Create Role : WEB ROLE : Trusted Entity: EC2 , Attach: AmazonS3ReadOnlyAccess, Name: WebRole
+Create another role: Name: AppRole :  Attach:
+                                          Internal access policies
+                                            CloudWatch access  
+Attach Roles to EC2 : Modify IAM Role
+EC2 → , Instance → , Actions → , Security →
+
+
+STEP 9 — Configure SECURITY GROUPS
+WEB-SG : Allow: 
+            HTTP 80 from Anywhere
+            HTTPS 443 from Anywhere
+            SSH 22 from My IP
+APP-SG : Allow:
+            8080 from Web-SG
+            SSH from Web-SG
+DB-SG : Allow:
+            MySQL 3306 from App-SG
+
+
+STEP 10 — Configure NACLs
+Public NACL : Associate: Public-Subnet :  Allow: 
+                                          HTTP
+                                          HTTPS
+                                          SSH
+Private NACL : Allow: Internal traffic only : Associate: 
+                                                  App Subnet
+                                                  DB Subnet
+
+
+STEP 11 — LOGGING & MONITORING
+Enable VPC Flow Logs : VPC → , Flow Logs → , Create Flow Log , Destination: CloudWatch Logs
+Enable CloudTrail : CloudTrail → , Create Trail , Store logs in S3.
+Create CloudWatch Dashboard : Add: 
+                                  CPUUtilization
+                                  NetworkIn
+                                  NetworkOut
+
+
+
+
+
